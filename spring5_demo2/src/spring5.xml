@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--  创建配置对象  -->
+    <bean id="user" class="com.zhouge.bean.User" ></bean>
+
+    <!--  set方法注入  -->
+    <bean id="book" class="com.zhouge.bean.Book">
+        <property name="bname" value="python数据分析"/>
+        <property name="bauthor" value="周葛"/>
+    </bean>
+
+    <!--  有参构造方法注入  -->
+    <bean id="order" class="com.zhouge.bean.Order">
+        <constructor-arg index="0" value="123456"/>
+        <constructor-arg name="address" value="湖北"/>
+    </bean>
+
+    <!--    p空间注入-->
+    <bean id="pStudent" class="com.zhouge.bean.Student" p:stuName="哈利波特" p:stuSex="男"></bean>
+
+    <!--  外部bean注入  -->
+    <bean id="userService" class="com.zhouge.service.UserService">
+        <!--ref 指向需要注入的bean标签的id值-->
+        <property name="userDao" ref="userDaoImpl"></property>
+    </bean>
+    <bean id="userDaoImpl" class="com.zhouge.dao.Impl.UserDaoImpl"></bean>
+
+
+    <!-- 内部bean注入-->
+    <bean id="emp" class="com.zhouge.bean.Emp">
+        <property name="eName" value="周葛"/>
+        <property name="eGender" value="男"/>
+        <property name="dept">
+            <bean id="dept" class="com.zhouge.bean.Dept">
+                <property name="dName" value="组织部"/>
+            </bean>
+        </property>
+
+    </bean>
+
+    <!-- 级联赋值-->
+    <bean id="studentScore" class="com.zhouge.bean.Student">
+        <property name="stuName" value="喻雅婷"/>
+        <property name="stuSex" value="女"/>
+
+        <!-- 级联赋值,类似于外部bean注入-->
+        <property name="score" ref="score"></property>
+
+    </bean>
+
+    <bean id="score" class="com.zhouge.bean.Score">
+        <property name="sName" value="护理"/>
+    </bean>
+
+
+</beans>

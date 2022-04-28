@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  bean的生命周期  -->
+    <bean id="myBeanPostProcessor" class="com.zhouge.bean.myBeanPostProcessor"></bean>
+
+    <bean id="order" class="com.zhouge.bean.Order" init-method="initMethod" destroy-method="destoryMethod">
+        <property name="oName"  value="手机"></property>
+    </bean>
+
+    <bean id="emp" class="com.zhouge.autowire.Emp" autowire="byName"/>
+
+    <bean id="dept" class="com.zhouge.autowire.Dept"/>
+
+
+</beans>

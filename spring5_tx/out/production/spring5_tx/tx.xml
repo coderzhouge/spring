@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+                            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+    <!--基于xml的方式实现声明式事务管理-->
+<!--开启组件扫描-->
+    <context:component-scan base-package="com.zhouge"/>
+
+<!--读取jdbc配置文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+<!--配置数据库连接池对象-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${prop.driverClass}"/>
+        <property name="url" value="${prop.url}"/>
+        <property name="username" value="${prop.username}"/>
+        <property name="password" value="${prop.password}"/>
+    </bean>
+
+<!--jdbcTemplate对象-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+<!--创建事务管理器-->
+    <!--id只能设置成transactionManager-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+
+        <!--注入数据库连接池-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+<!--配置通知-->
+    <tx:advice id="txAdvice">
+        
+        <!--配置事务参数-->
+        <tx:attributes>
+            <tx:method name="transfer" isolation="REPEATABLE_READ" propagation="REQUIRED" timeout="-1"/>
+        </tx:attributes>
+    </tx:advice>
+
+<!--配置切入点和切面-->
+    <aop:config>
+
+        <!--配置切入点-->
+        <aop:pointcut id="pt" expression="execution(* com.zhouge.service.UserService.transfer())"/>
+
+        <!--配置切面-->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pt"/>
+
+    </aop:config>
+
+</beans>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+    <!--1\基于xml方式注入集合类型属性-->
+    <bean id="student" class="com.zhouge.bean.Student">
+
+        <!-- 数组类型-->
+        <property name="names">
+            <array>
+                <value>周葛</value>
+                <value>周葛1</value>
+                <value>喻雅婷</value>
+            </array>
+        </property>
+
+        <!--list类型注入-->
+        <property name="scores">
+            <list>
+                <value>java</value>
+                <value>python</value>
+                <value>android</value>
+                <value>mysql</value>
+            </list>
+        </property>
+
+        <!--map类型注入-->
+        <property name="maps">
+            <map>
+                <entry key="english"  value="96"></entry>
+                <entry key="math"  value="64"></entry>
+            </map>
+        </property>
+
+        <!--set类型注入-->
+        <property name="sets">
+            <set>
+                <value>数学与计算机科学学院</value>
+                <value>软件工程</value>
+            </set>
+        </property>
+
+
+    </bean>
+
+    <!--2\基于xml方式注入对象集合类型-->
+    <bean id="course1" class="com.zhouge.bean.Course">
+        <property name="cName" value="语文"></property>
+        <property name="score"  value="95"></property>
+    </bean>
+
+    <bean id="course2" class="com.zhouge.bean.Course">
+        <property name="cName" value="数学"></property>
+        <property name="score" value="89"></property>
+    </bean>
+
+    <bean id="student2" class="com.zhouge.bean.Student">
+        <property name="courses">
+            <list>
+                <ref bean="course1"/>
+                <ref bean="course2"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 3\拓展:基于xml方式提取可复用的属性-->
+    <util:list id="course3">
+        <value>数学</value>
+        <value>语文</value>
+        <value>英语</value>
+    </util:list>
+
+    <bean id="student3" class="com.zhouge.bean.Student">
+        <property name="scores" ref="course3"></property>
+    </bean>
+
+    <!-- FactoryBean-->
+    <bean id="myBean" class="com.zhouge.factoryBean.myBean"></bean>
+
+    <!-- scope:prototype -->
+    <bean id="book" class="com.zhouge.bean.Book" >
+        <property name="bName" value="西游记"></property>
+    </bean>
+
+    <bean id="book2" class="com.zhouge.bean.Book" scope="prototype">
+        <property name="bName" value="西游记"></property>
+    </bean>
+
+    <!--  bean的生命周期  -->
+    <bean id="myBeanPostProcessor" class="com.zhouge.bean.myBeanPostProcessor"></bean>
+
+    <bean id="order" class="com.zhouge.bean.Order" init-method="initMethod" destroy-method="destoryMethod">
+        <property name="oName"  value="手机"></property>
+    </bean>
+
+</beans>
